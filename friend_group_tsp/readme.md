@@ -9,8 +9,8 @@ The aim of this project is to implement a pathfinding algorithm that efficiently
 1. **Clone the repository**:
 
     ```sh
-    git clone https://github.com/your-username/your-repo.git
-    cd your-repo
+    git clone https://github.com/bendejong0/friend-group-tsp.git
+    cd friend-group-tsp
     ```
 
 2. **Build the Docker image**:
@@ -41,14 +41,6 @@ To make changes and develop the application further:
 
     ```sh
     docker run -it friend_group_tsp
-    ```
-
-### Troubleshooting
-
-- **Docker Logs**: If you encounter any issues, check the container logs using:
-
-    ```sh
-    docker logs <container_id>
     ```
 
 - **Common Issues**:
