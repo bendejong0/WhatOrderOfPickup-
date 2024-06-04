@@ -94,6 +94,7 @@ fn confirm_names() -> bool {
     }
 }
 
+// TODO: FINISH. Allow for the deletion of names from the vector.
 fn add_or_remove_names(names: &mut Vec<String>, valid_names: &Vec<String>) {
 
     let mut user_choice: String = "user has not yet given a choice".to_string();
