@@ -14,4 +14,4 @@ COPY src ./src
 RUN cargo build --release
 
 # Set the startup command to run the binary
-CMD ["./target/release/myapp"]
+CMD ["sh", "-c", "./src/main"]

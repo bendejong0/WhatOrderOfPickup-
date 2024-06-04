@@ -7,13 +7,12 @@ use std::io;
 // 
 
 // This function gets the initial names
-fn get_names() -> Vec::<String>{
+fn get_names(valid_names: &Vec<String>) -> Vec::<String>{
     // initially, we'll store a name of all the people who need to be picked up
     let mut names = Vec::<String>::new();
 
     // here's a list of valid names
     // TODO: research a better way than to do "name".to_string();
-    let valid_names = vec!["javier".to_string(), "boris".to_string(), "voya".to_string(), "ben".to_string(), "calvin".to_string(), "jonas".to_string(), "nathan".to_string(), "izzie".to_string()];
 
     // query the user for the names
     println!("Who do you need to pick up?");
@@ -62,7 +61,8 @@ fn get_names() -> Vec::<String>{
     names
 }
 
-fn list_names(names: Vec::<String>){
+// this functions prints all the names in a given vector.
+fn list_names(names: &Vec::<String>){
     println!("To be picked up:");
     if names.len() == 0 {
         println!("None! Why are you using this?");
@@ -72,6 +72,7 @@ fn list_names(names: Vec::<String>){
     }
 }
 
+// this function asks the user for confirmation that they have all the correct names.
 fn confirm_names() -> bool {
 
     println!("\n");
@@ -93,14 +94,48 @@ fn confirm_names() -> bool {
     }
 }
 
+fn add_or_remove_names(names: &mut Vec<String>, valid_names: &Vec<String>) {
+
+    let mut user_choice: String = "user has not yet given a choice".to_string();
+
+    loop {
+        println!("Please the name of the person you are missing. (One name at a time please)");
+        io::stdin().read_line(&mut user_choice)
+            .expect("Failed to read user choice in add_or_remove_names()");
+
+        user_choice = user_choice.trim().to_lowercase();
+
+        if &user_choice == "q" {
+            break;
+        }
+
+        if valid_names.contains(&user_choice) {
+            names.push(user_choice.clone());
+            println!("{user_choice} successfully added!");
+        }
+        println!("\nPress q to quit");
+
+    }
+}
+
 fn main(){
     // get the names of the people to be picked up.
-    let names = get_names();
+    
+    let valid_names: Vec<String> = vec!["javier".to_string(), "boris".to_string(), "voya".to_string(), "ben".to_string(), "calvin".to_string(), "jonas".to_string(), "nathan".to_string(), "izzie".to_string()];
+    let names: Vec<String> = get_names(&valid_names);
     print!("\n");
     // print them so the user can see.
-    list_names(names);
+    list_names(&names);
     // this is to make sure its ready to run the pathfinding algorithm
     let run_pathfinder: bool = confirm_names();
     // actually do something later. this is to make sure its working lol.
-    print!("{run_pathfinder}");
+    
+    // if the pathfinder is not ready to run
+    while !run_pathfinder {
+
+        add_or_remove_names(&names, &valid_names);
+
+        let run_pathfinder: bool = confirm_names();
+    }
+
 }
