@@ -1,3 +1,4 @@
+use std::collections::HashSet;
 use std::io;
 
 //TODO: 
@@ -7,135 +8,138 @@ use std::io;
 // 
 
 // This function gets the initial names
-fn get_names(valid_names: &Vec<String>) -> Vec::<String>{
-    // initially, we'll store a name of all the people who need to be picked up
+fn get_names(valid_names: &HashSet<String>) -> Vec<String> {
     let mut names = Vec::<String>::new();
+    let mut input = String::new();
 
-    // here's a list of valid names
-    // TODO: research a better way than to do "name".to_string();
-
-    // query the user for the names
     println!("Who do you need to pick up?");
-    // create a spot to hold the name
-    let mut name: String = " ".to_string();
+    println!("Boris, Ben, Calvin, Izzie, Jonas, Javier, Nathan, Voya");
 
-    // kinda doing this really ugly but i dont really care.
-    // I could probabyl clean this up using some kind of recursion, but thats a TODO
-    while name.trim() != "q"{
-        // list of friends
-        println!("Boris, Ben, Calvin, Izzie, Jonas, Javier, Nathan, Voya");
+    loop {
         println!("Please input a name and hit enter. When you are done, put in q");
-        // you have to clear the name for some reason.
-        name.clear();
-        // save the user input
-        io::stdin().read_line(&mut name)
+        input.clear();
+        io::stdin().read_line(&mut input)
             .expect("Failed to read line");
 
-        // convert to all lowercase for easier processing
-        let name = name.trim().to_lowercase();
+        let name = input.trim().to_lowercase();
 
-        // if its not a valid name,
-        if !valid_names.contains(&name) && &name!="q" {
-            // tell the user,
-            println!("\nError: invalid name! Please stick to the valid names.\n");
-            continue;
-        }
-
-        if names.contains(&name){
-            println!("{name} is already in the list!\n");
-            continue;
-        }
-
-        // if it's "q" then just break.
         if name == "q" {
             break;
         }
 
-        // add to the vector of names
-        names.push(name.clone());
+        if !valid_names.contains(&name) {
+            println!("\nError: invalid name! Please stick to the valid names.\n");
+            continue;
+        }
 
-        // give a confirmation.
+        if names.iter().any(|n| n == &name) {
+            println!("{} is already in the list!\n", name);
+            continue;
+        }
+
+        names.push(name.clone());
         println!("{} added successfully!\n", name);
     }
-    // return the vector.
+
+    names.sort();
     names
 }
 
 // this functions prints all the names in a given vector.
-fn list_names(names: &Vec::<String>){
+fn list_names(names: &[String]) {
     println!("To be picked up:");
-    if names.len() == 0 {
+    if names.is_empty() {
         println!("None! Why are you using this?");
-    }
-    for name in names {
-        print!("{name}, ");
+    } else {
+        for name in names {
+            print!("{}, ", name);
+        }
     }
 }
 
 // this function asks the user for confirmation that they have all the correct names.
-fn confirm_names() -> bool {
-
-    println!("\n");
-    println!("Is this all the people?");
+fn confirm_names(names: &Vec<String>) -> bool {
+    list_names(&names);
+    println!("\nIs this all the people?");
     println!("(Options are Yes, Y, N, or No)");
 
-    let mut user_choice: String = " ".to_string();
+    let mut user_choice = String::new();
     io::stdin().read_line(&mut user_choice)
-        .expect("Failed to read user_choice in confirm_names()");
+        .expect("Failed to read user choice");
     user_choice = user_choice.trim().to_lowercase();
 
-    match user_choice.as_str(){
+    match user_choice.as_str() {
         "yes" | "y" => true,
         "no" | "n" => false,
         _ => {
             println!("Please choose a valid option!");
-            confirm_names()
+            confirm_names(&names)
         }
     }
 }
 
-fn add_or_remove_names(names: &mut Vec<String>, valid_names: &Vec<String>) {
+// Add a name to the names vector
+fn add_to_names(names: &mut Vec<String>) {
+    print!("Enter a name: ");
+    let mut name: String = "junkval".to_string();
+    io::stdin().read_line(&mut name)
+        .expect("Failed to read name in add_to_names()");
+    name = name.trim().to_lowercase();
 
-    let mut user_choice: String = "user has not yet given a choice".to_string();
-
-    loop {
-        println!("Please the name of the person you are missing. (One name at a time please)");
-        io::stdin().read_line(&mut user_choice)
-            .expect("Failed to read user choice in add_or_remove_names()");
-
-        user_choice = user_choice.trim().to_lowercase();
-
-        if &user_choice == "q" {
-            break;
-        }
-
-        if valid_names.contains(&user_choice) {
-            names.push(user_choice.clone());
-            println!("{user_choice} successfully added!");
-        }
-        println!("\nPress q to quit");
-
+    if !names.contains(&name) {
+        names.push(name.to_lowercase());
     }
 }
 
-fn main(){
-    // get the names of the people to be picked up.
-    
-    let valid_names: Vec<String> = vec!["javier".to_string(), "boris".to_string(), "voya".to_string(), "ben".to_string(), "calvin".to_string(), "jonas".to_string(), "nathan".to_string(), "izzie".to_string()];
-    let names: Vec<String> = get_names(&valid_names);
-    print!("\n");
-    // print them so the user can see.
-    list_names(&names);
-    // this is to make sure its ready to run the pathfinding algorithm
-    let run_pathfinder: bool = confirm_names();
-    // actually do something later. this is to make sure its working lol.
-    
-    // if the pathfinder is not ready to run
-    while !run_pathfinder {
+// Remove a name from the names vector
+fn remove_from_names(names: &mut Vec<String>) {
+    println!("Enter the name to remove:");
+    let mut name_to_remove = String::new();
+    io::stdin().read_line(&mut name_to_remove)
+        .expect("Failed to read name to remove");
+    names.retain(|name| name.to_lowercase() != name_to_remove.to_lowercase());
+}
 
-        add_or_remove_names(&names, &valid_names);
 
-        let run_pathfinder: bool = confirm_names();
+fn add_or_remove_names(names: &mut Vec<String>) {
+    let mut userchoice: String = "filler_text".to_string();
+    userchoice.clear();
+
+    println!("Would you like to (A)dd or (R)emove a name? Or input Q to quit.");
+    io::stdin().read_line(&mut userchoice)
+        .expect("Failed to get user choice in add_or_remove_names()");
+
+    userchoice=userchoice.trim().to_lowercase();
+
+    match userchoice.as_str() {
+        "a" => add_to_names(names),
+        "r" => remove_from_names(names),
+        "q" => return,
+        _ => {
+            println!("Invalid choice");
+            add_or_remove_names(names);
+            },
     }
+}
 
+fn main() {
+    let valid_names: HashSet<String> = [
+        "javier", "boris", "voya", "ben", "calvin", "jonas", "nathan", "izzie", "tim"
+    ].iter().map(|&s| s.to_string()).collect();
+
+    let mut names: Vec<String> = get_names(&valid_names);
+    println!();
+
+    let mut ready_to_pathfind = confirm_names(&names);
+
+    while !ready_to_pathfind {
+        // Add or remove names logic
+        println!("Press q to quit");
+        ready_to_pathfind = confirm_names(&names);
+
+        if !ready_to_pathfind{
+            add_or_remove_names(&mut names);
+        }
+
+    }
 }
