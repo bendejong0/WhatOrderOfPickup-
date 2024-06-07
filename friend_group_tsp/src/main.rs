@@ -108,9 +108,7 @@ fn add_or_remove_names(names: &mut Vec<String>) {
     println!("Would you like to (A)dd or (R)emove a name? Or input Q to quit.");
     io::stdin().read_line(&mut userchoice)
         .expect("Failed to get user choice in add_or_remove_names()");
-
     userchoice=userchoice.trim().to_lowercase();
-
     match userchoice.as_str() {
         "a" => add_to_names(names),
         "r" => remove_from_names(names),
