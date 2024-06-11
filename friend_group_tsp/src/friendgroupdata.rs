@@ -1,11 +1,10 @@
 // we're going to create a big huge adjacency matrix
 
-// we're going to create a big huge adjacency matrix
-
 use std::fmt;
 use std::collections::HashMap;
 
 // names are alphabetized
+// currently unused but may be used later
 enum NamesAndCorrespondingNumbers {
     Ben = 1,
     Boris = 2,
@@ -18,6 +17,7 @@ enum NamesAndCorrespondingNumbers {
     Voya = 9,
 }
 
+// currently unused but may be used later
 impl fmt::Display for NamesAndCorrespondingNumbers {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
@@ -53,17 +53,18 @@ fn get_friend_group_hashmap() -> HashMap<String,u8> {
 
 fn master_adjacency_matrix_creator() {
     // in miles, because miles dont change.
+    // TODO: fix the empty values
     let adj_matrix = [ 
-                       //Ben, Boris, Calvin, Izzie, Jonas, Javier, Nathan,  Tim,   Voya
-                        [0],   [26],  [12],   [36],   [12],  [13],  [20],   [20],  [13], // Ben
-                        [26],  [0],   [13],   [12],   [12],  [13],  [10],   [9],   [12], // Boris
-                        [23],  [13],  [0],    [23],   [1],   [4],   [2],    [3],   [2],  // Calvin
-                        [43],  [12],  [23],   [0],    [],    [],    [],     [],    [],   // Izzie
-                        [25],  [12],  [1],    [],     [0],   [],    [],     [],    [],   // Jonas 
-                        [25],  [13],  [4],    [],     [],    [0],   [],     [],    [],   // Javier
-                        [28],  [10],  [2],    [],     [],    [],    [0],    [],    [],   // Nathan
-                        [26],  [9],   [3],    [],     [],    [],    [],     [0],   [],   // Tim
-                        [27],  [12],  [2],    [],     [],    [],    [],     [],    [0]   // Voya
+                           //Ben, Boris, Calvin, Izzie, Jonas, Javier, Nathan,  Tim,   Voya
+                        vec![0,   26,    12,     36,    12,    13,     20,      20,    13], // Ben
+                        vec![26,  0,     13,     12,    12,    13,     10,      9,     12], // Boris
+                        vec![23,  13,    0,      23,    1,     4,      2,       3,     2],  // Calvin
+                        vec![43,  12,    23,     0,     ,      ,       ,        ,      ],   // Izzie
+                        vec![25,  12,    1,      ,      0,     ,       ,        ,      ],   // Jonas 
+                        vec![25,  13,    4,      ,      ,      0,      ,        ,      ],   // Javier
+                        vec![28,  10,    2,      ,      ,      ,       0,       ,      ],   // Nathan
+                        vec![26,  9,     3,      ,      ,      ,       ,        0,     ],   // Tim
+                        vec![27,  12,    2,      ,      ,      ,       ,        ,      0]   // Voya
     ];
     adj_matrix
 }
@@ -83,9 +84,13 @@ fn real_adjacency_matrix_creator() {
         if let Some(&idx) = name_map.get(*name) {
             // For each name, copy the distances from the master matrix to the real matrix.
             for j in 0..names.len() {
-                real_matrix[i][j] = master_matrix[(idx - 1) as usize][j];
+                real_matrix[i][j] = master_matrix[idx][j];
             }
         }
+    }
+    // set the distance to self = 0
+    for i in 0..names.len() {
+        real_matrix[i][i] = 0;
     }
     // otherwise,
         // set the distance = infinity.
