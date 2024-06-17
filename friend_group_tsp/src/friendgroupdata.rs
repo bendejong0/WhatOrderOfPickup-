@@ -24,7 +24,7 @@ impl fmt::Display for NamesAndCorrespondingNumbers {
             NamesAndCorrespondingNumbers::Ben => write!(f, "Ben"),
             NamesAndCorrespondingNumbers::Boris => write!(f, "Boris"),
             NamesAndCorrespondingNumbers::Calvin => write!(f, "Calvin"),
-            NamesAndCorrespondingNumbers::Izzie => write!(f, "Izzie"),
+            NamesAndCorrespondingNumbers::Izzie => write!(f, "Izzie"), 
             NamesAndCorrespondingNumbers::Jonas => write!(f, "Jonas"),
             NamesAndCorrespondingNumbers::Javier => write!(f, "Javier"),
             NamesAndCorrespondingNumbers::Nathan => write!(f, "Nathan"),
@@ -54,22 +54,22 @@ fn get_friend_group_hashmap() -> HashMap<String,u8> {
 fn master_adjacency_matrix_creator() {
     // in miles, because miles dont change.
     // TODO: fix the empty values
-    let adj_matrix = [ 
+    let adj_matrix: Vec<Vec<usize>> = [ 
                            //Ben, Boris, Calvin, Izzie, Jonas, Javier, Nathan,  Tim,   Voya
                         vec![0,   26,    12,     36,    12,    13,     20,      20,    13], // Ben
                         vec![26,  0,     13,     12,    12,    13,     10,      9,     12], // Boris
                         vec![23,  13,    0,      23,    1,     4,      2,       3,     2],  // Calvin
-                        vec![43,  12,    23,     0,     ,      ,       ,        ,      ],   // Izzie
-                        vec![25,  12,    1,      ,      0,     ,       ,        ,      ],   // Jonas 
-                        vec![25,  13,    4,      ,      ,      0,      ,        ,      ],   // Javier
-                        vec![28,  10,    2,      ,      ,      ,       0,       ,      ],   // Nathan
-                        vec![26,  9,     3,      ,      ,      ,       ,        0,     ],   // Tim
-                        vec![27,  12,    2,      ,      ,      ,       ,        ,      0]   // Voya
+                        vec![43,  12,    23,     0,     21,    22,     19,      19,    21], // Izzie
+                        vec![25,  12,    1,      21,    0,     ,       ,        ,      ],   // Jonas 
+                        vec![25,  13,    4,      22,    ,      0,      ,        ,      ],   // Javier
+                        vec![28,  10,    2,      19,    ,      ,       0,       ,      ],   // Nathan
+                        vec![26,  9,     3,      19,    ,      ,       ,        0,     ],   // Tim
+                        vec![27,  12,    2,      21,    ,      ,       ,        ,      0]   // Voya
     ];
     adj_matrix
 }
 
-fn real_adjacency_matrix_creator() {
+pub fn real_adjacency_matrix_creator() {
     // Retrieve the master adjacency matrix.
     let master_matrix = master_adjacency_matrix_creator();
     let names = vec!["ben", "boris", "calvin", "izzie", "jonas", "javier", "nathan", "tim", "voya"];
@@ -94,9 +94,5 @@ fn real_adjacency_matrix_creator() {
     }
     // otherwise,
         // set the distance = infinity.
-}
-
-// temporary main, delete later.
-fn main(){
-    
+    real_matrix
 }

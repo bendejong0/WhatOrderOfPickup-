@@ -1,5 +1,7 @@
 use std::collections::HashSet;
 use std::io;
+mod solver;
+use solver::dijkstra_path;
 
 //TODO: 
 // put the different functions in different files. Probably group the menu files in a file, and the solver in a file.
@@ -140,4 +142,5 @@ fn main() {
         }
 
     }
+    
 }
