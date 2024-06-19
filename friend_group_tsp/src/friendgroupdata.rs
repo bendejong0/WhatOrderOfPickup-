@@ -54,7 +54,7 @@ fn get_friend_group_hashmap() -> HashMap<String,u8> {
 fn master_adjacency_matrix_creator() {
     // in miles, because miles dont change.
     // TODO: fix the empty values
-    let adj_matrix: Vec<Vec<usize>> = [ 
+    let adj_matrix: Vec<Vec<u8>> = [ 
                            //Ben, Boris, Calvin, Izzie, Jonas, Javier, Nathan,  Tim,   Voya
                         vec![0,   26,    12,     36,    12,    13,     20,      20,    13], // Ben
                         vec![26,  0,     13,     12,    12,    13,     10,      9,     12], // Boris
@@ -84,7 +84,7 @@ pub fn real_adjacency_matrix_creator() {
         if let Some(&idx) = name_map.get(*name) {
             // For each name, copy the distances from the master matrix to the real matrix.
             for j in 0..names.len() {
-                real_matrix[i][j] = master_matrix[idx][j];
+                real_matrix[i][j] = master_matrix[idx][j] as i32;
             }
         }
     }
