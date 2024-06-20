@@ -1,6 +1,7 @@
 use std::collections::HashSet;
 use std::io;
 mod solver;
+use friendgroupdata::master_adjacency_matrix_creator;
 use solver::dijkstra_path;
 mod friendgroupdata;
 pub use friendgroupdata::real_adjacency_matrix_creator;
@@ -125,7 +126,7 @@ fn add_or_remove_names(names: &mut Vec<String>) {
 }
 
 fn main() {
-    let valid_names: HashSet<String> = [
+    /*let valid_names: HashSet<String> = [
         "javier", "boris", "voya", "ben", "calvin", "jonas", "nathan", "izzie", "tim"
     ].iter().map(|&s| s.to_string()).collect();
 
@@ -143,6 +144,12 @@ fn main() {
             add_or_remove_names(&mut names);
         }
 
-    }
+    }*/
+    let source = 1;
+    let nodes = [1, 3];
+    let end_node = 4;
+    let adj_matrix = friendgroupdata::master_adjacency_matrix_creator();
+    let solved = solver::dijkstra_path(source, &nodes, end_node, &adj_matrix);
+    println!("solved: {:?}", solved);
     
 }

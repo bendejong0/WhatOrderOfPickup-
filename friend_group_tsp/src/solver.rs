@@ -24,7 +24,7 @@ impl Ord for State {
     }
 }
 
-pub fn dijkstra_path(source: usize, nodes: &[usize], end_node: usize, adj_matrix: &Vec<Vec<usize>>) -> Option<u32>{
+pub fn dijkstra_path(source: usize, nodes: &[usize], end_node: usize, adj_matrix: &Vec<Vec<u8>>) -> Option<u32>{
     let N = nodes.len();
     let mut dist = vec![vec![MAX; 1 << nodes.len()]; N];
     let mut heap = BinaryHeap::<State>::new();
